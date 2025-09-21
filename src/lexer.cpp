@@ -86,11 +86,6 @@ void Lexer::tokenizer_loop(char c)
         tokens.push_back(Token(TokenType::EQUAL, "="));
         currentIndex++;
     }
-    else if (c == ';')
-    {
-        tokens.push_back(Token(TokenType::SEMICOLON, ";"));
-        currentIndex++;
-    }
     else if (c == '(')
     {
         tokens.push_back(Token(TokenType::LPAREN, "("));

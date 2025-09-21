@@ -58,10 +58,20 @@ int Parser::parse_Factor()
         int val = this->parse_Expr();
         if (tokens[currentIndex].type != TokenType::RPAREN)
         {
-            currentIndex++;
             throw std::runtime_error("Missing ')'");
         }
+        currentIndex++;
         return val;
+    }
+    else if (tokens[currentIndex].type == TokenType::IDENTIFIER)
+    {
+        std::string name = tokens[currentIndex].value;
+        currentIndex++;
+        if (vars.find(name) == vars.end())
+        {
+            throw std::runtime_error("Undefined variable: " + name);
+        }
+        return std::stoi(vars[name].value);
     }
 
     throw std::runtime_error("Unexpected token in parse_Factor()");
@@ -77,16 +87,13 @@ bool Parser::parse()
             std::string name = tokens[currentIndex].value;
 
             currentIndex++;
-            if (tokens[currentIndex].value != "=")
-                return 1;
+            if (tokens[currentIndex].type != TokenType::EQUAL)
+                throw std::runtime_error("Missing '=' after variable declaration");
 
             currentIndex++;
-            if (tokens[currentIndex].type == TokenType::IDENTIFIER || tokens[currentIndex].type == TokenType::NUMBER)
-            {
-                int val = parse_Expr();
-            }
+            int res = this->parse_Expr();
+            vars[name] = Token(TokenType::NUMBER, std::to_string(res));
 
-            currentIndex++;
             continue;
         }
         else if (tokens[currentIndex].type == TokenType::PRINT)
@@ -95,6 +102,7 @@ bool Parser::parse()
             if (tokens[currentIndex].value != "(")
                 return 1;
             currentIndex++;
+
             if (tokens[currentIndex].type == TokenType::IDENTIFIER)
             {
                 std::cout << vars[tokens[currentIndex].value].value << '\n';

@@ -44,7 +44,6 @@ enum class TokenType
     RPAREN,
     LBRACE,
     RBRACE,
-    SEMICOLON,
 
     END_OF_FILE
 };
