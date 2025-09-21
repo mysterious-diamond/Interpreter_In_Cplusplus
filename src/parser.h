@@ -11,6 +11,10 @@ public:
     bool parse();
 
 private:
+    int parse_Expr();
+    int parse_Term();
+    int parse_Factor();
+
     std::vector<Token> tokens;
     std::unordered_map<std::string, Token> vars;
     long unsigned int currentIndex = 0;

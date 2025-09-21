@@ -1,2 +1,6 @@
 let x = 99
+let y = 99 + 50
+print("x is :")
 print(x)
+print("y is :")
+print(y)
