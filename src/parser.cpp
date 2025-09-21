@@ -77,46 +77,60 @@ int Parser::parse_Factor()
     throw std::runtime_error("Unexpected token in parse_Factor()");
 }
 
+void Parser::print()
+{
+    currentIndex++;
+    if (tokens[currentIndex].value != "(")
+        throw std::runtime_error("Expected '(', got " + tokens[currentIndex].value + " instead");
+    currentIndex++;
+
+    if (tokens[currentIndex].type == TokenType::IDENTIFIER ||
+        tokens[currentIndex].type == TokenType::NUMBER ||
+        tokens[currentIndex].type == TokenType::LPAREN)
+    {
+        int val = parse_Expr();
+        std::cout << val << '\n';
+
+        if (tokens[currentIndex].type != TokenType::RPAREN)
+            throw std::runtime_error("Missing ')' in print");
+
+        currentIndex++;
+    }
+    else if (tokens[currentIndex].type == TokenType::STRING)
+    {
+        std::cout << tokens[currentIndex].value << '\n';
+        currentIndex++;
+        currentIndex++;
+    }
+}
+
+void Parser::declare_var()
+{
+    currentIndex++;
+    std::string name = tokens[currentIndex].value;
+
+    currentIndex++;
+    if (tokens[currentIndex].type != TokenType::EQUAL)
+        throw std::runtime_error("Missing '=' after variable declaration");
+
+    currentIndex++;
+    int res = this->parse_Expr();
+    vars[name] = Token(TokenType::NUMBER, std::to_string(res));
+}
+
 bool Parser::parse()
 {
     while (currentIndex < tokens.size())
     {
         if (tokens[currentIndex].type == TokenType::LET)
         {
-            currentIndex++;
-            std::string name = tokens[currentIndex].value;
-
-            currentIndex++;
-            if (tokens[currentIndex].type != TokenType::EQUAL)
-                throw std::runtime_error("Missing '=' after variable declaration");
-
-            currentIndex++;
-            int res = this->parse_Expr();
-            vars[name] = Token(TokenType::NUMBER, std::to_string(res));
-
+            this->declare_var();
             continue;
         }
         else if (tokens[currentIndex].type == TokenType::PRINT)
         {
-            currentIndex++;
-            if (tokens[currentIndex].value != "(")
-                return 1;
-            currentIndex++;
-
-            if (tokens[currentIndex].type == TokenType::IDENTIFIER)
-            {
-                std::cout << vars[tokens[currentIndex].value].value << '\n';
-                currentIndex++;
-                currentIndex++;
-                continue;
-            }
-            else if (tokens[currentIndex].type == TokenType::STRING)
-            {
-                std::cout << tokens[currentIndex].value << '\n';
-                currentIndex++;
-                currentIndex++;
-                continue;
-            }
+            this->print();
+            continue;
         }
     }
 

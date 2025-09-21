@@ -1,6 +1,9 @@
 let x = 99
-let y = 99 + 50
+let y = x + 50
 print("x is :")
 print(x)
 print("y is :")
 print(y)
+print("Sum of them is :")
+print(x + y)
+print("Hooray!")

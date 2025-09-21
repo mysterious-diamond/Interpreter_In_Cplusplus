@@ -15,6 +15,8 @@ private:
     int parse_Expr();
     int parse_Term();
     int parse_Factor();
+    void print();
+    void declare_var();
 
     std::vector<Token> tokens;
     std::unordered_map<std::string, Token> vars;
