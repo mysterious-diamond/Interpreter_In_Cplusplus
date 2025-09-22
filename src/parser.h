@@ -3,6 +3,7 @@
 #include <vector>
 #include <unordered_map>
 #include <string>
+#include <cmath>
 #include "token.h"
 
 class Parser

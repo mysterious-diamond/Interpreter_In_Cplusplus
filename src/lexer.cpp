@@ -101,9 +101,24 @@ void Lexer::tokenizer_loop(char c)
         tokens.push_back(Token(TokenType::PLUS, "+"));
         currentIndex++;
     }
+    else if (c == '-')
+    {
+        tokens.push_back(Token(TokenType::MINUS, "-"));
+        currentIndex++;
+    }
+    else if (c == '*')
+    {
+        tokens.push_back(Token(TokenType::STAR, "*"));
+        currentIndex++;
+    }
+    else if (c == '/')
+    {
+        tokens.push_back(Token(TokenType::SLASH, "/"));
+        currentIndex++;
+    }
     else
     {
-        std::cout << "Unexpected character : " << c << '\n';
+        throw std::runtime_error("Unexpected character : " + c);
     }
 }
 
